@@ -6,13 +6,10 @@ import os
 from urllib.request import urlretrieve as retrieve
 # from werkzeug.utils import secure_filename
 # import requests
-from google.cloud import storage
 
 from flask import Flask, render_template, request# redirect, flash, url_for
 
 app = Flask(__name__)
-
-CLOUD_STORAGE_BUCKET = os.environ['sc20-covid-prediction']
 
 # UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'csv'}
@@ -63,32 +60,6 @@ def import_covid_csv():
                     return data
 
         return render_template('index.html', l=covid_list, k=compute_csv())
-
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    """Process the uploaded file and upload it to Google Cloud Storage."""
-    uploaded_file = request.files.get('../covid_file/us-counties.csv')
-
-    if not uploaded_file:
-        return 'No file uploaded.', 400
-
-    # Create a Cloud Storage client.
-    gcs = storage.Client()
-
-    # Get the bucket that the file will be uploaded to.
-    bucket = gcs.get_bucket(CLOUD_STORAGE_BUCKET)
-
-    # Create a new blob and upload the file's content.
-    blob = bucket.blob(uploaded_file.filename)
-
-    blob.upload_from_string(
-        uploaded_file.read(),
-        content_type=uploaded_file.content_type
-    )
-
-    # The public URL can be used to directly access the uploaded file via HTTP.
-    return blob.public_url
 
 
 # Function to only allow CSV files
