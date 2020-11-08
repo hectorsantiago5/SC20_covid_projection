@@ -17,9 +17,11 @@ ALLOWED_EXTENSIONS = {'csv'}
 
 
 # Function to connect our home HTML file
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
+@app.route('/')
+def index():
+    url_state = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
+    retrieve(url_state, 'covid_file/us-states.csv')
+    return render_template('index.html')
 
 
 @app.route('/aboutus')
@@ -28,7 +30,7 @@ def aboutus():
 
 
 # Function to get a COVID-19 data file and display the contents of it
-@app.route('/')
+@app.route('/covid')
 def import_covid_csv():
     url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
     retrieve(url, 'covid_file/us-counties.csv')
@@ -59,7 +61,7 @@ def import_covid_csv():
                     data.append({'cases': cases, 'deaths': deaths, 'rate': rate})
                     return data
 
-        return render_template('index.html', l=covid_list, k=compute_csv())
+        return render_template('covid.html', l=covid_list, k=compute_csv())
 
 
 # Function to only allow CSV files
