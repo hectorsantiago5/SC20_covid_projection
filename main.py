@@ -2,7 +2,6 @@
 import csv
 # import json
 import os
-# import urllib
 #from urllib.request import urlretrieve as retrieve
 # from werkzeug.utils import secure_filename
 import requests
@@ -20,17 +19,14 @@ ALLOWED_EXTENSIONS = {'csv'}
 @app.route('/')
 def index():
     CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
-    requests.get(CSV_URL, 'covid_file/us-counties_test.csv')
-    return render_template('index.html')
+    req = requests.get(CSV_URL, 'covid_file/us-states.csv')
 
-    # with requests.Session() as s:
-    #     download = s.get(CSV_URL)
-    #
-    #     decoded_content = download.content.decode('utf-8')
-    #
-    #     state_file = csv.reader(decoded_content.splitlines(), delimiter=',')
-    #
-    #     requests.get(decoded_content, 'covid_file/us-counties_test.csv')
+    with open('covid_file/us-states.csv', 'w') as f:
+        writer = csv.writer(f)
+        for line in req.iter_lines():
+            writer.writerow(line.decode('utf-8').split(','))
+
+    return render_template('index.html')
 
 
 @app.route('/aboutus')
@@ -41,36 +37,42 @@ def aboutus():
 # Function to get a COVID-19 data file and display the contents of it
 @app.route('/covid')
 def import_covid_csv():
-    # url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
-    # retrieve(url, 'covid_file/us-counties.csv')
+    CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+    req = requests.get(CSV_URL, 'covid_file/us-counties.csv')
 
-    with open('covid_file/us-counties.csv', 'r') as covidfile:
-        csv_read = csv.DictReader(covidfile)
-        # print(csv_read)
-        covid_list = []
+    with open('covid_file/us-counties.csv', 'w') as f:
+        writer = csv.writer(f)
+        for line in req.iter_lines():
+            writer.writerow(line.decode('utf-8').split(','))
 
-        # For loop to get the last 7 days of Covid Data
-        for j in list(reversed(list(csv_read)))[0:7]:
-            # print(j)
-            date = j['date']
-            cases = j['cases']
-            deaths = j['deaths']
-            covid_list.append({'date': date, 'cases': cases, 'deaths': deaths})
 
-        # Function to compute and display the COVID-19 death rate
-        def compute_csv():
-            data = []
-            with open('covid_file/us-counties.csv', 'r') as covidfile:
-                csv_read = csv.DictReader(covidfile)
-                for i in list(reversed(list(csv_read))):
-                    # print(i)
-                    cases = i['cases']
-                    deaths = i['deaths']
-                    rate = int(deaths) / int(cases)
-                    data.append({'cases': cases, 'deaths': deaths, 'rate': rate})
-                    return data
+    # with open('covid_file/us-counties.csv', 'r') as covidfile:
+    #     csv_read = csv.DictReader(covidfile)
+    #     # print(csv_read)
+    #     covid_list = []
+    #
+    #     # For loop to get the last 7 days of Covid Data
+    #     for j in list(reversed(list(csv_read)))[0:7]:
+    #         # print(j)
+    #         date = j['date']
+    #         cases = j['cases']
+    #         deaths = j['deaths']
+    #         covid_list.append({'date': date, 'cases': cases, 'deaths': deaths})
+    #
+    #     # Function to compute and display the COVID-19 death rate
+    #     def compute_csv():
+    #         data = []
+    #         with open('covid_file/us-counties.csv', 'r') as covidfile:
+    #             csv_read = csv.DictReader(covidfile)
+    #             for i in list(reversed(list(csv_read))):
+    #                 # print(i)
+    #                 cases = i['cases']
+    #                 deaths = i['deaths']
+    #                 rate = int(deaths) / int(cases)
+    #                 data.append({'cases': cases, 'deaths': deaths, 'rate': rate})
+    #                 return data
 
-        return render_template('covid.html', l=covid_list, k=compute_csv())
+        return render_template('covid.html')#, l=covid_list, k=compute_csv())
 
 
 # Function to only allow CSV files
