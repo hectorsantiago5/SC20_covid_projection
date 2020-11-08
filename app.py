@@ -28,7 +28,7 @@ def aboutus():
 
 
 # Function to get a COVID-19 data file and display the contents of it
-@app.route('/covid')
+@app.route('/')
 def import_covid_csv():
     url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
     retrieve(url, 'covid_file/us-counties.csv')
