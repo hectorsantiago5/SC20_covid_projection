@@ -3,11 +3,11 @@ import csv
 # import json
 import os
 # import urllib
-from urllib.request import urlretrieve as retrieve
+#from urllib.request import urlretrieve as retrieve
 # from werkzeug.utils import secure_filename
-# import requests
+import requests
 
-from flask import Flask, render_template, request# redirect, flash, url_for
+from flask import Flask, render_template #request redirect, flash, url_for
 
 app = Flask(__name__)
 
@@ -19,9 +19,18 @@ ALLOWED_EXTENSIONS = {'csv'}
 # Function to connect our home HTML file
 @app.route('/')
 def index():
-    url_state = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
-    retrieve(url_state, 'covid_file/us-states.csv')
+    CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
+    requests.get(CSV_URL, 'covid_file/us-counties_test.csv')
     return render_template('index.html')
+
+    # with requests.Session() as s:
+    #     download = s.get(CSV_URL)
+    #
+    #     decoded_content = download.content.decode('utf-8')
+    #
+    #     state_file = csv.reader(decoded_content.splitlines(), delimiter=',')
+    #
+    #     requests.get(decoded_content, 'covid_file/us-counties_test.csv')
 
 
 @app.route('/aboutus')
@@ -32,8 +41,8 @@ def aboutus():
 # Function to get a COVID-19 data file and display the contents of it
 @app.route('/covid')
 def import_covid_csv():
-    url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
-    retrieve(url, 'covid_file/us-counties.csv')
+    # url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+    # retrieve(url, 'covid_file/us-counties.csv')
 
     with open('covid_file/us-counties.csv', 'r') as covidfile:
         csv_read = csv.DictReader(covidfile)
