@@ -4,4 +4,8 @@ gunicorn==20.0.4; python_version > '3.0'
 gunicorn==19.10.0; python_version < '3.0'
 
 requests~=2.23.0
+<<<<<<< HEAD
 pandas~=0.25.1
+=======
+pandas~=0.25.1
+>>>>>>> d7a13ba8a033c0801e8d29202dacf0b2664604aa
