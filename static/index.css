@@ -2,13 +2,6 @@
 	background-color: #b26389;
 }
 
-#header {
-	color: blue;
-	text-align: center;
-	border-style: solid;
-  	border-color: #92a8d1;
-}
-
 
 #profile-pic {
 	/*	border-style: double;*/
@@ -63,14 +56,15 @@ li a:hover {
 	margin-right: 10%;
 }
 
-footer {
-	color: blue;
-	/* position: absolute; */
-	/* bottom: -40%; */
-	text-align: center;
-	/* margin-left: 35%; */
-	border-style: solid;
-  	border-color: #da1414;
+.footer {
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: black;
+   color: white;
+   text-align: center;
+	padding: 15px 7px;
+
 }
 
 /* Add a gray right border to all list items */
