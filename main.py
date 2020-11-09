@@ -13,6 +13,9 @@ s = pd.read_csv(url)
 url2 = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
 c = pd.read_csv(url2)
 
+url3 = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv"
+us = pd.read_csv(url2)
+
 
 # Function to connect our home HTML file
 @app.route('/')
