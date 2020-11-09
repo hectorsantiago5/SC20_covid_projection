@@ -1,5 +1,4 @@
 import csv
-import requests
 import pandas as pd
 
 from flask import Flask, render_template, request #redirect, flash, url_for
@@ -18,14 +17,6 @@ c = pd.read_csv(url2)
 # Function to connect our home HTML file
 @app.route('/')
 def index():
-    # CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
-    # req = requests.get(CSV_URL, 'covid_file/us-states.csv')
-    #
-    # with open('covid_file/us-states.csv', 'w') as f:
-    #     writer = csv.writer(f)
-    #     for line in req.iter_lines():
-    #         writer.writerow(line.decode('utf-8').split(','))
-
     return render_template('index.html')
 
 
@@ -44,7 +35,7 @@ def aboutus():
 # Function to get a COVID-19 data file and display the contents of it
 @app.route('/covid',methods = ['POST', 'GET'])
 def covid():
-    with open('us-counties.csv', 'r') as covidfile:
+    with open('us.csv', 'r') as covidfile:
         csv_read = csv.DictReader(covidfile)
         # print(csv_read)
         covid_list = []
