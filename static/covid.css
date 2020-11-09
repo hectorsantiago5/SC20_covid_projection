@@ -36,10 +36,6 @@ tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-table, th, td {
-  border: 1px solid black;
-}
-
 img {
   float: right;
 }
