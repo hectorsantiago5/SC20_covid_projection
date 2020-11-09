@@ -1,30 +1,29 @@
-# import base64
 import csv
-# import json
-import os
-#from urllib.request import urlretrieve as retrieve
-# from werkzeug.utils import secure_filename
 import requests
+import pandas as pd
 
-from flask import Flask, render_template #request redirect, flash, url_for
+from flask import Flask, render_template  # request redirect, flash, url_for
 
 app = Flask(__name__)
 
-# UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'csv'}
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+url = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv"
+s = pd.read_csv(url)
+
+url2 = "https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv"
+c = pd.read_csv(url2)
 
 
 # Function to connect our home HTML file
 @app.route('/')
 def index():
-    CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
-    req = requests.get(CSV_URL, 'covid_file/us-states.csv')
-
-    with open('covid_file/us-states.csv', 'w') as f:
-        writer = csv.writer(f)
-        for line in req.iter_lines():
-            writer.writerow(line.decode('utf-8').split(','))
+    # CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
+    # req = requests.get(CSV_URL, 'covid_file/us-states.csv')
+    #
+    # with open('covid_file/us-states.csv', 'w') as f:
+    #     writer = csv.writer(f)
+    #     for line in req.iter_lines():
+    #         writer.writerow(line.decode('utf-8').split(','))
 
     return render_template('index.html')
 
@@ -36,16 +35,7 @@ def aboutus():
 
 # Function to get a COVID-19 data file and display the contents of it
 @app.route('/covid')
-def import_covid_csv():
-    CSV_URL = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
-    req = requests.get(CSV_URL, 'covid_file/us-counties.csv')
-
-    with open('covid_file/us-counties.csv', 'w') as f:
-        writer = csv.writer(f)
-        for line in req.iter_lines():
-            writer.writerow(line.decode('utf-8').split(','))
-
-
+def covid():
     # with open('covid_file/us-counties.csv', 'r') as covidfile:
     #     csv_read = csv.DictReader(covidfile)
     #     # print(csv_read)
@@ -72,13 +62,7 @@ def import_covid_csv():
     #                 data.append({'cases': cases, 'deaths': deaths, 'rate': rate})
     #                 return data
 
-        return render_template('covid.html')#, l=covid_list, k=compute_csv())
-
-
-# Function to only allow CSV files
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return render_template('covid.html')  # , l=covid_list, k=compute_csv())
 
 
 app.secret_key = 'some_secret_key_27'
